@@ -13,9 +13,24 @@
         where mainId = #{id}
     </select>
 
+    <select id="queryTimeLine" resultType="map">
+        select *
+        from order_timeLine
+        where mainId = #{mainId}
+        order by timestamp
+    </select>
+
+    <insert id="insertTimeLine">
+        insert into order_timeLine (id, mainId, timestamp, content)
+        value (REPLACE(UUID(),"-",""), #{mainId}, #{timestamp}, #{content})
+    </insert>
+
     <insert id="insertOrder">
+        <selectKey keyProperty="id" resultType="String" order="BEFORE">
+            select UUID() from dual
+        </selectKey>
         insert into order_main (id, name, phone, address, orderDate, sendDate, remark, createTime, createBy, status)
-        value (REPLACE(UUID(),"-",""), #{name}, #{phone}, #{address}, #{orderDate}, #{sendDate}, #{remark}, #{createTime}, #{createBy}, #{status})
+        value (REPLACE(#{id},"-",""), #{name}, #{phone}, #{address}, #{orderDate}, #{sendDate}, #{remark}, #{createTime}, #{createBy}, #{status})
     </insert>
 
     <update id="updateOrder">

@@ -135,9 +135,12 @@
             </el-form-item>
           </el-col>
         </el-row>
+        <el-row :span="24">
+          <order-timeLine :mainId="dialog.data.id" ref="orderTimeLine" v-show="dialog.mode === 3"></order-timeLine>
+        </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="状态" prop="status">
+            <el-form-item label="状态" prop="status" v-show="dialog.mode !== 3">
               <el-select v-model="dialog.data.status" placeholder="请选择">
                 <el-option label="待付款" value="1"></el-option>
                 <el-option label="待尾款" value="2"></el-option>
@@ -149,12 +152,12 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="编制人" prop="userName">
+            <el-form-item label="编制人" prop="userName" v-show="dialog.mode !== 3">
               <el-input disabled v-model="dialog.data.userName"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="编制时间" prop="createTime">
+            <el-form-item label="编制时间" prop="createTime" v-show="dialog.mode !== 3">
               <el-date-picker
                 disabled
                 v-model="dialog.data.createTime"
@@ -175,8 +178,12 @@
 </template>
 <script>
 import moment from 'moment'
+import orderTimeLine from './order-timeLine'
 export default {
   name: '',
+  components: {
+    orderTimeLine
+  },
   data () {
     return {
       grid: {
@@ -286,7 +293,7 @@ export default {
           status: '1',
           userId: this.$store.state.user.userInfo.userId,
           userName: this.$store.state.user.userInfo.userName,
-          createTime: moment().format('YYYY-MM-DD')
+          createTime: moment().format('YYYY-MM-DD HH:mm:ss')
         }
         this.dialog.mode = 1
         this.dialog.show = true
@@ -295,7 +302,7 @@ export default {
         error.message && this.$message.error(error.message)
       }
     },
-    onView (row) {
+    async onView (row) {
       this.dialog.mode = 3
       this.dialog.show = true
       this.dialog.data = Object.assign({}, row)
@@ -361,13 +368,17 @@ export default {
     async onSave () {
       try {
         await this.validateBeforeSave()
+        let content = ''
+        let mainId = ''
         if (this.dialog.mode === 1) {
-          await this.$api.add({
+          let { data } = await this.$api.add({
             data: {
               mapperId: 'com.bosssoft.monitor.dao.OrderMapper.insertOrder',
               ...this.dialog.data
             }
           })
+          content = this.$store.state.user.userInfo.userName + '创建订单'
+          mainId = data.data.id.split('-').join('')
         } else {
           let model = this.dialog.data
           await this.$api.modify({
@@ -382,7 +393,11 @@ export default {
               status: model.status
             }
           })
+          content = this.$store.state.user.userInfo.userName + '修改订单'
+          mainId = model.id
         }
+
+        await this.$refs['orderTimeLine'].save(mainId, content)
         this.featchData()
         this.dialog.show = false
         this.$message.success(this.dialogMode.message)

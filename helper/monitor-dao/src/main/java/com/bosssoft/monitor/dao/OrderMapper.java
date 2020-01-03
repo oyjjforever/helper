@@ -9,4 +9,6 @@ public interface OrderMapper {
     void batchInsert(@Param("orderDetails") List<OrderDetail> orderDetails);
     void batchUpdate(@Param("orderDetails") List<OrderDetail> orderDetails);
     void batchDelete(@Param("orderDetails") List<OrderDetail> orderDetails);
+
+    String insertOrder ();
 }

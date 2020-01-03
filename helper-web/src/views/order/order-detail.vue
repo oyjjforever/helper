@@ -9,6 +9,7 @@
       <el-link icon="el-icon-circle-plus-outline" @click="onAdd" v-show="isUpdating">增加行</el-link>
       <span class="amount-span"> 总金额：{{amount}} </span>
     </div>
+    <order-timeLine ref="orderTimeLine" v-show="false"></order-timeLine>
     <div class="orderDetail-container">
       <el-table
         border
@@ -18,7 +19,6 @@
         :height="grid.height"
         highlight-current-row
         v-loading="grid.loading"
-        @row-click="onRowClick"
         @selection-change="val => grid.selectedRow =val"
       >
         <el-table-column type="selection" align="center" width="50"></el-table-column>
@@ -91,8 +91,12 @@
   </div>
 </template>
 <script>
+import orderTimeLine from './order-timeLine'
 export default {
   name: '',
+  components: {
+    orderTimeLine
+  },
   data () {
     return {
       isUpdating: false,
@@ -241,6 +245,7 @@ export default {
     },
     async onSave () {
       try {
+        let content = ''
         await this.validateBeforeSave()
         this.modifyDate.push(...this.deleteDate)
         let data = JSON.stringify(this.modifyDate)
@@ -252,6 +257,8 @@ export default {
             data: data
           }
         })
+        content = this.$store.state.user.userInfo.userName + '修改了商品'
+        await this.$refs['orderTimeLine'].save(this.mainId, content)
         await this.updateAmount()
         this.featchData(this.mainId)
         this.isUpdating = false
