@@ -1,0 +1,65 @@
+server:
+  port: 10012
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types:
+      text/css,
+      text/html,
+      image/png,
+      image/jpeg,
+      application/json,
+      application/javascript,
+      application/octet-stream
+spring:
+  profiles:
+    active: dev
+    http:
+      multipart:
+        max-request-size: 1024MB
+        max-file-size:  1024MB
+  datasource:
+    druid:
+      stat-view-servlet:
+        enabled: true
+        login-username: admin
+        login-password: 123456
+      web-stat-filter:
+        enabled: true
+        url-pattern: /api/*
+        session-stat-enable: true
+      aop-patterns:
+        com.bosssoft.monitor.dao.*,
+        com.bosssoft.monitor.service.*,
+        com.bosssoft.monitor.common.service.*,
+        com.bosssoft.monitor.web.controller.*,
+        com.bosssoft.monitor.common.controller.*
+    dynamic:
+      druid:
+        stat:
+          merge-sql: true
+          log-slow-sql: true
+          slow-sql-millis: 3000
+        filters: config,stat,wall
+        time-between-log-stats-millis: 300000
+        pool-prepared-statements: true
+        wall:
+          multi-statement-allow: true
+      datasource:
+        slave_1:
+          username: ${spring.datasource.dynamic.datasource.master.username}
+          password: ${spring.datasource.dynamic.datasource.master.password}
+          url: ${spring.datasource.dynamic.datasource.master.url}
+          driver-class-name: ${spring.datasource.dynamic.datasource.master.driver-class-name}
+logging:
+  config: classpath:logback.xml
+  level:
+    com.bosssoft.monitor.dao : debug
+mybatis:
+  mapperLocations: classpath*:mapper/*.xml
+  typeAliasesPackage: com.bosssoft.monitor.entity
+pagehelper:
+  reasonable: false
+  helper-dialect: mysql
+  params: count=countSql
+  support-methods-arguments: true

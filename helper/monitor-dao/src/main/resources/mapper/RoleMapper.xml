@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.monitor.dao.RoleMapper">
+    <select id="roles" resultType="map">
+        select FID "fid", NAME "name", STATUS "status", CREATE_TIME "createTime", REMARK "remark", CODE "code"
+        from TOOL_MONITOR_ROLE
+        <where>
+            <if test="fid != null">
+                FID = #{fid}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="roleName != null">
+                and name like '%' || #{roleName} || '%'
+            </if>
+        </where>
+        order by create_time
+    </select>
+    <!--	校验是否存在重复的角色编码-->
+    <select id="checkCode" resultType="map">
+		select count(1) "count"
+		from TOOL_MONITOR_ROLE
+		where code=#{code}
+	</select>
+    <!--	校验角色有没有被使用-->
+    <select id="ifUsed" resultType="map">
+		select count(1) "count"
+		from TOOL_MONITOR_USER_ROLE
+		where role_id=#{roleId}
+	</select>
+    <!--	获取最新一条记录的角色编码-->
+    <select id="newestCode" resultType="map">
+		select max(code) "code"
+		from TOOL_MONITOR_ROLE
+	</select>
+    <!--	获取角色拥有的菜单-->
+    <select id="roleMenu" resultType="string">
+		select a.menu_id "menuId"
+		from TOOL_MONITOR_ROLE_MENU a
+		where a.role_id=#{roleId}
+	</select>
+    <!--	获取角色用户-->
+    <select id="roleUser" resultType="map">
+		select b.user_id "userId",b.user_name "userName",b.user_code "userCode",b.IDENTITY_CODE "identityCode",b.MOBILE_NO "mobileNo",c.org_name "mainOrg",d.position_name "mainPosition"
+		from TOOL_MONITOR_USER_ROLE a
+		left join AFA_USER b on a.user_id=b.user_id
+		left join afa_org c on b.MAIN_ORGID=c.org_id
+        left join AFA_ORG_POSITION d on b.MAIN_POSITIONID= d.position_id
+		where a.role_id=#{roleId}
+	</select>
+    <!--	禁用、启用-->
+    <update id="toggleEnable">
+        update TOOL_MONITOR_ROLE set status = #{status}
+        where fid in
+        <foreach item="item" index="index" collection="roleIds" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+    <update id="updateByPrimaryKeySelective">
+        update TOOL_MONITOR_ROLE
+        <set>
+                NAME = #{name,jdbcType=VARCHAR},
+                STATUS = #{status,jdbcType=DECIMAL},
+            <if test="createTime != null">
+                CREATE_TIME = #{createTime,jdbcType=DATE},
+            </if>
+                REMARK = #{remark,jdbcType=VARCHAR},
+            <if test="code != null">
+                CODE = #{code,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where FID = #{fid,jdbcType=VARCHAR}
+    </update>
+    <insert id="insertSelective">
+        insert into TOOL_MONITOR_ROLE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fid != null">
+                FID,
+            </if>
+            <if test="name != null">
+                NAME,
+            </if>
+            <if test="status != null">
+                STATUS,
+            </if>
+            <if test="createTime != null">
+                CREATE_TIME,
+            </if>
+            <if test="remark != null">
+                REMARK,
+            </if>
+            <if test="code != null">
+                CODE,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fid != null">
+                #{fid,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=DECIMAL},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=DATE},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <insert id="insertRoleMenu">
+        <foreach item="roleId" collection="roleIds" open="begin" close="end;">
+            delete TOOL_MONITOR_ROLE_MENU where role_id=#{roleId};
+            <if test="menuIds != null">
+                <foreach item="menuId" collection="menuIds">
+                    insert into TOOL_MONITOR_ROLE_MENU (role_id,menu_id) values (#{roleId},#{menuId});
+                </foreach>
+            </if>
+        </foreach>
+    </insert>
+    <insert id="insertRoleUser">
+        <foreach item="roleId" collection="roleIds" open="begin" close="end;">
+            <if test="userIds != null">
+                <foreach item="userId" collection="userIds">
+                    delete TOOL_MONITOR_USER_ROLE where role_id= #{roleId} and user_id=#{userId};
+                    insert into TOOL_MONITOR_USER_ROLE (role_id,user_id) values (#{roleId},#{userId});
+                </foreach>
+            </if>
+        </foreach>
+    </insert>
+    <delete id="deleteByPrimaryKey">
+    delete from TOOL_MONITOR_ROLE
+    where FID = #{fid,jdbcType=VARCHAR}
+  </delete>
+    <delete id="deleteRoleUser">
+        <foreach item="roleId" collection="roleIds" open="begin" close="end;">
+            <if test="userIds != null">
+                <foreach item="userId" collection="userIds">
+                    delete TOOL_MONITOR_USER_ROLE where role_id= #{roleId} and user_id=#{userId};
+                </foreach>
+            </if>
+        </foreach>
+  </delete>
+</mapper>

@@ -1,0 +1,17 @@
+BBBBBBBBBBBBBBBBB                                                         SSSSSSSSSSSSSSS                     ffffffffffffffff           tttt
+B::::::::::::::::B                                                      SS:::::::::::::::S                   f::::::::::::::::f       ttt:::t
+B::::::BBBBBB:::::B                                                    S:::::SSSSSS::::::S                  f::::::::::::::::::f      t:::::t
+BB:::::B     B:::::B                                                   S:::::S     SSSSSSS                  f::::::fffffff:::::f      t:::::t
+  B::::B     B:::::B   ooooooooooo       ssssssssss       ssssssssss   S:::::S               ooooooooooo    f:::::f       ffffffttttttt:::::ttttttt
+  B::::B     B:::::B oo:::::::::::oo   ss::::::::::s    ss::::::::::s  S:::::S             oo:::::::::::oo  f:::::f             t:::::::::::::::::t
+  B::::BBBBBB:::::B o:::::::::::::::oss:::::::::::::s ss:::::::::::::s  S::::SSSS         o:::::::::::::::of:::::::ffffff       t:::::::::::::::::t
+  B:::::::::::::BB  o:::::ooooo:::::os::::::ssss:::::ss::::::ssss:::::s  SS::::::SSSSS    o:::::ooooo:::::of::::::::::::f       tttttt:::::::tttttt
+  B::::BBBBBB:::::B o::::o     o::::o s:::::s  ssssss  s:::::s  ssssss     SSS::::::::SS  o::::o     o::::of::::::::::::f             t:::::t
+  B::::B     B:::::Bo::::o     o::::o   s::::::s         s::::::s             SSSSSS::::S o::::o     o::::of:::::::ffffff             t:::::t
+  B::::B     B:::::Bo::::o     o::::o      s::::::s         s::::::s               S:::::So::::o     o::::o f:::::f                   t:::::t
+  B::::B     B:::::Bo::::o     o::::ossssss   s:::::s ssssss   s:::::s             S:::::So::::o     o::::o f:::::f                   t:::::t    tttttt
+BB:::::BBBBBB::::::Bo:::::ooooo:::::os:::::ssss::::::ss:::::ssss::::::sSSSSSSS     S:::::So:::::ooooo:::::of:::::::f                  t::::::tttt:::::t
+B:::::::::::::::::B o:::::::::::::::os::::::::::::::s s::::::::::::::s S::::::SSSSSS:::::So:::::::::::::::of:::::::f                  tt::::::::::::::t
+B::::::::::::::::B   oo:::::::::::oo  s:::::::::::ss   s:::::::::::ss  S:::::::::::::::SS  oo:::::::::::oo f:::::::f                    tt:::::::::::tt
+BBBBBBBBBBBBBBBBB      ooooooooooo     sssssssssss      sssssssssss     SSSSSSSSSSSSSSS      ooooooooooo   fffffffff                      ttttttttttt
+ :: Spring Boot ::   (v${spring-boot.version})

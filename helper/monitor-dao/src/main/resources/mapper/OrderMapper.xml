@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.monitor.dao.OrderMapper">
+    <select id="queryOrder" resultType="map">
+        select a.*
+        from order_main a
+        order by createTime
+    </select>
+
+    <select id="queryOrderDetail" resultType="map">
+        select *
+        from order_line a
+        where mainId = #{id}
+    </select>
+
+    <insert id="insertOrder">
+        insert into order_main (id, name, phone, address, orderDate, sendDate, remark, createTime, createBy, status)
+        value (REPLACE(UUID(),"-",""), #{name}, #{phone}, #{address}, #{orderDate}, #{sendDate}, #{remark}, #{createTime}, #{createBy}, #{status})
+    </insert>
+
+    <update id="updateOrder">
+        update order_main
+        <trim prefix="set" suffixOverrides=",">
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="sendDate != null">
+                sendDate = #{sendDate},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOrder">
+        delete from order_main where id = #{id}
+    </delete>
+
+    <delete id="deleteOrderDetail">
+        delete from order_line where id = #{id}
+    </delete>
+
+    <insert id="batchInsert">
+        insert into order_line (mainId, id, model, color, format, price, num) values
+        <foreach collection="orderDetails" item="item" separator=",">
+            (#{item.mainId}, REPLACE(UUID(),"-",""), #{item.model}, #{item.color}, #{item.format}, #{item.price}, #{item.num})
+        </foreach>
+    </insert>
+
+    <insert id="batchUpdate">
+        replace into order_line (mainId, id, model, color, format, price, num, status) values
+        <foreach collection="orderDetails" item="item" separator=",">
+            (#{item.mainId}, #{item.id}, #{item.model}, #{item.color}, #{item.format}, #{item.price}, #{item.num}, #{item.status})
+        </foreach>
+    </insert>
+
+    <delete id="batchDelete">
+        delete from order_line where id in
+        <foreach collection="orderDetails" item="item" open="(" close=")" separator=",">
+            #{item.id}
+        </foreach>
+    </delete>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bosssoft.monitor.dao.MenuMapper">
+	<!-- 获取菜单数据 -->
+	<select id="menus" resultType="map">
+		select a.fid "id",a.pid "parentId",a.name "name",a.component "component",a.code "code",a.target "target",a.sort_code "sortCode",
+		a.icon "icon",a.config "config",a.route_config "routeConfig",a.menu_code "menuCode"
+		from TOOL_MONITOR_MENU a
+		where a.status=1
+		order by a.sort_code
+	</select>
+	<!-- 根据用户ID，查询用户有权限的菜单 -->
+	<select id="userMenu" resultType="map">
+		select distinct t4.fid "id",t4.pid "parentId",t4.name "name",t4.component "component",t4.code "code",t4.target "target",t4.sort_code "sortCode"
+		from TOOL_MONITOR_USER_ROLE t1
+		inner join TOOL_MONITOR_ROLE t2 on t1.role_id = t2.fid  and t2.status = 1
+     	inner join TOOL_MONITOR_ROLE_MENU t3 on t2.fid = t3.role_id
+     	inner join TOOL_MONITOR_MENU t4 on t3.menu_id = t4.fid and t4.status = 1
+		where t1.user_id = #{userId}
+		order by t4.sort_code
+	</select>
+</mapper>
