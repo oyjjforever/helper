@@ -7,6 +7,16 @@
         order by createTime
     </select>
 
+    <select id="queryWholeOrderBySendDate" resultType="map">
+        select a.id "id", a.name "name", a.phone "phone", a.address "address", a.orderDate "orderDate", amount "amount", a.remark "remark",
+        b.model "model", b.color "color", b.format "format", b.price "price", b.num "num", b.discount "discount"
+        from order_main a
+        left join order_line b
+        on a.id = b.mainId
+        where a.sendDate = #{sendDate} and a.status = '3'
+        order by a.createTime
+    </select>
+
     <select id="queryOrderDetail" resultType="map">
         select *
         from order_line a

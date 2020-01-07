@@ -66,7 +66,6 @@
 </template>
 
 <script>
-import router from '@/router'
 export default {
   name: 'picture-group',
   data () {
@@ -81,7 +80,7 @@ export default {
   },
   methods: {
     translate () {
-      router.push({ name: 'picturesDetail' })
+      // router.push({ name: 'picturesDetail' })
     }
   }
 }
