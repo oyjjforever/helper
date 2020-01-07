@@ -125,7 +125,8 @@ export default {
       let contentTmp = {}
       let { data } = await this.$api.queryData({
         params: {
-          mapperId: 'com.bosssoft.monitor.dao.OrderMapper.queryOrder'
+          mapperId: 'com.bosssoft.monitor.dao.OrderMapper.queryOrder',
+          status: '3'
         }
       })
       data.data.forEach(item => {

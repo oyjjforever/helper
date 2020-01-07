@@ -12,6 +12,8 @@ export default {
       // 权限管理
       'permission': () =>
         import('@/views/permission/index' /* webpackChunkName: "permission" */),
+      'home': () =>
+        import('@/views/home/index' /* webpackChunkName: "home" */),
       'order': () =>
         import('@/views/order/index' /* webpackChunkName: "order" */),
       'delivery': () =>

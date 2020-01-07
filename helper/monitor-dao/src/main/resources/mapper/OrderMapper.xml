@@ -4,7 +4,39 @@
     <select id="queryOrder" resultType="map">
         select a.*
         from order_main a
+        <where>
+            <if test="name != null">
+                name = #{name}
+            </if>
+            <if test="address != null">
+                and address = #{address}
+            </if>
+            <if test="phone != null">
+                and phone = #{phone}
+            </if>
+            <if test="sendDate != null">
+                and sendDate = #{sendDate}
+            </if>
+            <if test="orderDate != null">
+                and orderDate = #{orderDate}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+        </where>
         order by createTime
+    </select>
+
+    <select id="queryOrderThisMonth" resultType="map">
+        select * from
+        (select count(*) "orderCount", sum(amount) "amountCount"
+        from order_main a
+        where substr(orderDate,1,7) = #{month}) one,
+        (select sum(b.num) "goodsCount"
+        from order_main a
+        left join order_line b
+        on a.id = b.mainId
+        where substr(a.orderDate,1,7) = #{month}) two
     </select>
 
     <select id="queryWholeOrderBySendDate" resultType="map">
