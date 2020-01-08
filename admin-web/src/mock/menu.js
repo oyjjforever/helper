@@ -1,6 +1,32 @@
 // import store from '@/store'
-// 单位端菜单数据
-const menus = [
+const mobileMenus = [
+  // {
+  //   'id': 0,
+  //   'code': 'home',
+  //   'name': 'home',
+  //   'target': 'component',
+  //   'component': 'home',
+  //   'sortCode': 1
+  // },
+  {
+    'id': 1,
+    'code': 'order',
+    'name': 'order',
+    'target': 'component',
+    'component': 'order-mobile',
+    'sortCode': 1
+  },
+  {
+    'id': 1,
+    'code': 'delivery',
+    'name': 'delivery',
+    'target': 'component',
+    'component': 'delivery-mobile',
+    'sortCode': 1
+  }
+]
+
+const pcMenus = [
   {
     'id': 0,
     'code': 'home',
@@ -28,6 +54,10 @@ const menus = [
 ]
 export default {
   menu: config => {
+    let menus = pcMenus
+    if (navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)) {
+      menus = mobileMenus
+    }
     return {
       success: true,
       data: menus

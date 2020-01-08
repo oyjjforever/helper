@@ -9,14 +9,16 @@
           <div class="cell" @click="onView(data.day)" show-overflow-tooltip>
             {{ data.day.substring(8).split('-').join('-') }}
             <br/>
-            <span style="font-size: 5px;" v-html="content['day' + data.day.split('-').join('')]"/>
+            <span style="font-size: 4px;">
+              {{content['day' + data.day.split('-').join('')] ? '点击查看' : ''}}
+            </span>
           </div>
         </el-badge>
       </template>
     </el-calendar>
     <el-dialog
       v-dialog
-      width="700px"
+      width="100VW"
       v-if="dialog.show"
       :visible.sync="dialog.show"
       :modal-append-to-body="false"
@@ -27,16 +29,18 @@
         <span>查看详情</span>
       </div>
       <div class="content">
-        <el-carousel height="500px" indicator-position="outside">
+        <el-carousel height="700px" indicator-position="outside">
           <el-carousel-item v-for="item in dialog.data" :key="item.id">
             <el-form disabled ref="form" :model="item" label-width="110px">
               <el-row>
-                <el-col :span="12">
+                <el-col :span="24">
                   <el-form-item label="客户姓名" prop="name">
                     <el-input v-model.trim="item.name"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+              </el-row>
+              <el-row>
+                <el-col :span="24">
                   <el-form-item label="下单时间" prop="orderDate">
                     <el-date-picker
                       type="date"
@@ -49,12 +53,21 @@
                 </el-col>
               </el-row>
               <el-row>
-                <el-col :span="12">
+                <el-col :span="24">
                   <el-form-item label="客户电话" prop="phone">
                     <el-input v-model.trim="item.phone"></el-input>
                   </el-form-item>
                 </el-col>
-                <el-col :span="12">
+              </el-row>
+              <el-row>
+                <el-col :span="24">
+                  <el-form-item label="总金额" prop="amount">
+                    <el-input v-model.trim="item.amount"></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span="24">
                   <el-form-item label="送货地址" prop="address">
                     <el-input v-model.trim="item.address"></el-input>
                   </el-form-item>
@@ -73,13 +86,6 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <el-row>
-                <el-col :span="12">
-                  <el-form-item label="总金额" prop="amount">
-                    <el-input v-model.trim="item.amount"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
             </el-form>
             <el-table
               border
@@ -88,7 +94,6 @@
               :data="item.detail"
               highlight-current-row
             >
-              <el-table-column type="index" width="50" align="center" label="序号"></el-table-column>
               <el-table-column prop="model" label="型号" align="left" show-overflow-tooltip></el-table-column>
               <el-table-column prop="color" label="颜色" align="left" show-overflow-tooltip></el-table-column>、
               <el-table-column prop="format" label="规格" align="left" show-overflow-tooltip></el-table-column>
@@ -107,6 +112,7 @@ export default {
   name: 'index',
   data () {
     return {
+      screenWidth: window.screen.availWidth.toString(), // 屏幕尺寸
       loading: true,
       content: {},
       dialog: {

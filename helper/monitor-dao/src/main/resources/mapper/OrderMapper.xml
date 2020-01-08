@@ -39,13 +39,20 @@
         where substr(a.orderDate,1,7) = #{month}) two
     </select>
 
-    <select id="queryWholeOrderBySendDate" resultType="map">
-        select a.id "id", a.name "name", a.phone "phone", a.address "address", a.orderDate "orderDate", amount "amount", a.remark "remark",
+    <select id="queryWholeOrderSelective" resultType="map">
+        select a.id "id", a.name "name", a.phone "phone", a.address "address", a.orderDate "orderDate", a.sendDate "sendDate", amount "amount", a.remark "remark", a.status "status",
         b.model "model", b.color "color", b.format "format", b.price "price", b.num "num", b.discount "discount"
         from order_main a
         left join order_line b
         on a.id = b.mainId
-        where a.sendDate = #{sendDate} and a.status = '3'
+        <where>
+            <if test="sendDate != null">
+                a.sendDate = #{sendDate}
+            </if>
+            <if test="status != null">
+                and a.status = #{status}
+            </if>
+        </where>
         order by a.createTime
     </select>
 

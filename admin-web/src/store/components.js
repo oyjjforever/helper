@@ -17,7 +17,12 @@ export default {
       'order': () =>
         import('@/views/order/index' /* webpackChunkName: "order" */),
       'delivery': () =>
-        import('@/views/delivery/index' /* webpackChunkName: "delivery" */)
+        import('@/views/delivery/index' /* webpackChunkName: "delivery" */),
+
+      'order-mobile': () =>
+        import('@/views/order-mobile/index' /* webpackChunkName: "order" */),
+      'delivery-mobile': () =>
+        import('@/views/delivery-mobile/index' /* webpackChunkName: "delivery" */)
     }
   }
 }
