@@ -5,6 +5,9 @@
         select a.*
         from order_main a
         <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
             <if test="name != null">
                 name = #{name}
             </if>
@@ -40,7 +43,7 @@
     </select>
 
     <select id="queryWholeOrderSelective" resultType="map">
-        select a.id "id", a.name "name", a.phone "phone", a.address "address", a.orderDate "orderDate", a.sendDate "sendDate", amount "amount", a.remark "remark", a.status "status",
+        select a.id "id", a.name "name", a.phone "phone", a.address "address", a.orderDate "orderDate", a.sendDate "sendDate", amount "amount", a.remark "remark", a.status "status", a.picUrl "picUrl",
         b.model "model", b.color "color", b.format "format", b.price "price", b.num "num", b.discount "discount"
         from order_main a
         left join order_line b
@@ -107,6 +110,12 @@
                 status = #{status},
             </if>
         </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateOrderPicUrl">
+        update order_main
+        set picUrl = #{picUrl}
         where id = #{id}
     </update>
 

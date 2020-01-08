@@ -16,4 +16,5 @@ public interface OrderService {
     void insertOrderDetail(List<OrderDetail> orderDetails) throws BusinessException;
     void updateOrderDetail(List<OrderDetail> orderDetails) throws BusinessException;
     void deleteOrderDetail(List<OrderDetail> orderDetails) throws BusinessException;
+    void updateOrderPicUrl(String picUrl, String id) throws BusinessException;;
 }

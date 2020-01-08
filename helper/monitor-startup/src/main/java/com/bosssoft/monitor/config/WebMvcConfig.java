@@ -41,6 +41,9 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+        registry.addResourceHandler("/pictures/**")
+                .addResourceLocations("file:/java-project/pic/"); //I:/test/
         super.addResourceHandlers(registry);
     }
 

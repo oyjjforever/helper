@@ -1,5 +1,5 @@
 server:
-  port: 10012
+  port: 8989
   compression:
     enabled: true
     min-response-size: 1024
@@ -13,7 +13,7 @@ server:
       application/octet-stream
 spring:
   profiles:
-    active: dev
+    active: prod
     http:
       multipart:
         max-request-size: 1024MB
@@ -63,3 +63,4 @@ pagehelper:
   helper-dialect: mysql
   params: count=countSql
   support-methods-arguments: true
+

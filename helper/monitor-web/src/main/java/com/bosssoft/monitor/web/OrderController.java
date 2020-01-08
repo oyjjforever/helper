@@ -6,11 +6,13 @@ import com.bosssoft.monitor.common.entity.ResponseResult;
 import com.bosssoft.monitor.entity.OrderDetail;
 import com.bosssoft.monitor.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.ResourceUtils;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
@@ -67,7 +69,31 @@ public class OrderController {
             return ResponseResult.failure(e.getMessage());
         }
     }
-
+    @PostMapping("pictureUpload")
+    public void test(@RequestParam(value="id",required=false) String id,@RequestParam("file") MultipartFile file){
+        String fileName = file.getOriginalFilename();
+        String realName = "";
+        int dot = fileName.lastIndexOf('.');
+        if ((dot >-1) && (dot < (fileName.length() - 1))) {
+            realName =  id + fileName.substring(dot);
+        }
+        String filePath = null;
+        filePath = "/java-project/pic/" + realName;
+        File desFile = new File(filePath);
+        if(!desFile.getParentFile().exists()){
+            desFile.mkdirs();
+        }
+        try {
+            file.transferTo(desFile);
+        } catch (IllegalStateException | IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            orderService.updateOrderPicUrl(realName, id);
+        } catch (BusinessException e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }

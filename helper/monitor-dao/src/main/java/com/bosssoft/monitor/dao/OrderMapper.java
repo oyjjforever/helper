@@ -11,4 +11,5 @@ public interface OrderMapper {
     void batchDelete(@Param("orderDetails") List<OrderDetail> orderDetails);
 
     String insertOrder ();
+    void updateOrderPicUrl(@Param("picUrl") String picUrl, @Param("id") String id);
 }

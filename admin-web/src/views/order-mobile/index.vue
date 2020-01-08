@@ -11,6 +11,10 @@
           </span>
           {{item.name + ' - ' + item.address}}
         </template>
+        <el-button type="success" @click="uploadPicture(item)">上传图片</el-button>
+        <picture-upload :picture="item.picture" @refreshOrder="featchData"></picture-upload>
+        <el-button type="primary" @click="showPicture(item)">查看图片</el-button>
+        <picture-show :picture="item.picture"></picture-show>
         <div>联系方式：{{item.phone}}</div>
         <div>订单时间：{{item.orderDate}}</div>
         <div>送货时间：{{item.sendDate}}</div>
@@ -35,10 +39,17 @@
 </template>
 
 <script>
+import PictureShow from '../../components/picture-show'
+import PictureUpload from '../../components/picture-upload'
 export default {
   name: 'index',
+  components: { PictureUpload, PictureShow },
   data () {
     return {
+      picture: {
+        show: false,
+        name: null
+      },
       orders: []
     }
   },
@@ -69,6 +80,12 @@ export default {
             amount: item.amount,
             remark: item.remark,
             status: item.status,
+            picture: {
+              picUrl: item.picUrl,
+              picShow: false,
+              picUpload: false,
+              picUploadId: item.id
+            },
             detail: []
           }
           checked[item.id] = order
@@ -86,6 +103,21 @@ export default {
         formatedData.push(checked[item])
       }
       return formatedData
+    },
+    async featchPicture (id) {
+      let { data } = await this.$api.queryData({
+        params: {
+          mapperId: 'com.bosssoft.monitor.dao.OrderMapper.queryOrder',
+          id: id
+        }
+      })
+      this.picture.name = data.data[0].picUrl
+    },
+    showPicture (item) {
+      item.picture.picShow = true
+    },
+    uploadPicture (item) {
+      item.picture.picUpload = true
     }
   }
 }

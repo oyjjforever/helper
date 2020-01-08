@@ -5,10 +5,8 @@ export default {
   namespaced: true,
   state: {
     asyncComponents: {
-      'simple-grid': () =>
-        import('@/views/simple-grid' /* webpackChunkName: "permission" */),
-      'paging-grid': () =>
-        import('@/views/paging-grid' /* webpackChunkName: "permission" */),
+      'test': () =>
+        import('@/views/test' /* webpackChunkName: "delivery" */),
       // 权限管理
       'permission': () =>
         import('@/views/permission/index' /* webpackChunkName: "permission" */),

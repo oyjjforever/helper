@@ -50,4 +50,14 @@ public class OrderServiceImpl implements OrderService {
             throw new BusinessException("");
         }
     }
+
+    @Override
+    public void updateOrderPicUrl(String picUrl, String id) throws BusinessException {
+        try {
+            orderMapper.updateOrderPicUrl(picUrl, id);
+        } catch (Exception e){
+            e.printStackTrace();
+            throw new BusinessException("");
+        }
+    }
 }
