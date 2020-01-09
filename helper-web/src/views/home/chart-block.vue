@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 const echarts = require('echarts/lib/echarts')
 require('echarts/lib/component/tooltip')
 require('echarts/lib/component/legend')
@@ -145,6 +146,8 @@ export default {
       let { data } = await this.$api.queryData({
         params: {
           mapperId: 'com.bosssoft.monitor.dao.OrderMapper.queryPopularGoodsTopN',
+          daytype: 'month',
+          dayNo: moment().format('YYYY-MM'),
           limit: 5
         }
       })

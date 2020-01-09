@@ -149,7 +149,7 @@
     </delete>
 
     <select id="queryPopularGoodsTopN" resultType="map">
-        select b.model "model", count(*) "count"
+        select b.model "model", sum(b.num) "count"
         from order_line b
         left join order_main a
         on a.id = b.mainId
