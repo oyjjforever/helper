@@ -4,6 +4,7 @@ import org.apache.tomcat.util.buf.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,8 @@ import java.util.Map;
 public class WebMvcConfig extends WebMvcConfigurationSupport {
     @Autowired
     Interceptor interceptor;
+    @Value("${picConfig.location}")
+    String fileLocation;
 
     @Bean
     public HttpPutFormContentFilter httpPutFormContentFilter() {
@@ -43,7 +46,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
 
         registry.addResourceHandler("/pictures/**")
-                .addResourceLocations("file:/java-project/pic/"); //I:/test/
+                .addResourceLocations("file:" + fileLocation);
         super.addResourceHandlers(registry);
     }
 

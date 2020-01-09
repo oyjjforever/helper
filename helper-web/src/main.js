@@ -43,7 +43,7 @@ apiHelper.register({
     render: h => h(App),
     created () {
       // 初始化系统标识
-      store.commit('system/setAppId')
+      store.commit('system/setIsMobile')
       // 如果当前路由需要登录，才进行自动登录
       if (router.currentRoute.meta.needLogin !== false) {
         store.commit('user/setLoginState', true)

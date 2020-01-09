@@ -60,9 +60,6 @@ export default {
     menuData: { // 菜单数据
       type: Array
     }
-  },
-  mounted () {
-    console.log(this.menuData)
   }
 }
 </script>

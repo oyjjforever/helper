@@ -1,16 +1,14 @@
-import qs from 'qs'
 export default {
   namespaced: true,
   state: {
-    appId: 1
+    isMobile: false
   },
   mutations: {
     /**
      * [setAppId 通过url设置系统应用标识]
      */
-    setAppId (state) {
-      let appId = qs.parse(window.location.search.substr(1)).appId || 1
-      state.appId = parseInt(appId)
+    setIsMobile (state) {
+      state.isMobile = navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i)
     }
   }
 }

@@ -1,24 +1,11 @@
 <template>
   <div class="base-navbar">
     <div class="function-area">
-      <div class="nav-time" key="nav-time">
+      <div class="nav-time" key="nav-time" v-if="!isMobile">
         <div class="sys-time">{{sysTime}}</div>
         <div class="sys-date">{{sysDate}}</div>
       </div>
-      <div class="split-line"></div>
-      <img
-        v-if="mode === 'development'"
-        class="func-img animated infinite hvr-pop"
-        :class="{flash: hasNewError}"
-        src="img/bug.png"
-        @click="showErrorLog"
-        v-popover:errorLog
-      />
-      <img
-        class="func-img hvr-pop"
-        :src="'img/' + (fullscreen ? 'exit-screen.png' : 'full-screen.png')"
-        @click="fullScreen"
-      />
+      <div class="split-line" v-if="!isMobile"></div>
       <el-dropdown placement="bottom" @command="cmd => this[cmd]()">
         <span>
           <img class="func-img avatar" src="img/boy.png"/>
@@ -31,44 +18,18 @@
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <el-popover
-      ref="errorLog"
-      placement="bottom-end"
-      title="错误日志"
-      width="1100"
-      trigger="click"
-      popper-class="base-navbar"
-    >
-      <el-table :data="errorLog" border stripe height="500" class="error-log-table">
-        <el-table-column width="150" property="time" label="时间" align="center"></el-table-column>
-        <el-table-column width="400" property="name" label="信息">
-          <template slot-scope="scope">
-            <span class="title">Msg：</span>
-            <el-tag type="danger">{{scope.row.message}}</el-tag>
-            <br />
-            <br />
-            <span class="title">Info：</span>
-            <el-tag type="warning">{{scope.row.info}}</el-tag>
-            <br />
-            <br />
-            <span class="title">Url：</span>
-            <el-tag type="success">{{scope.row.url}}</el-tag>
-            <br />
-          </template>
-        </el-table-column>
-        <el-table-column property="stack" label="Stack" align="center"></el-table-column>
-      </el-table>
-    </el-popover>
   </div>
 </template>
 
 <script>
+import store from '@/store'
 import moment from 'moment'
 import { mapState } from 'vuex'
 export default {
   name: 'BaseNavbar',
   data () {
     return {
+      isMobile: store.state.system.isMobile,
       sysTime: moment().format('HH:mm:ss'),
       sysDate: moment().format('YYYY/MM/DD dddd'),
       mode: process.env.NODE_ENV,

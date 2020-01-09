@@ -3,9 +3,11 @@ package com.bosssoft.monitor.web;
 import com.alibaba.fastjson.JSON;
 import com.bosssoft.monitor.common.entity.BusinessException;
 import com.bosssoft.monitor.common.entity.ResponseResult;
+import com.bosssoft.monitor.common.utils.YamlUtil;
 import com.bosssoft.monitor.entity.OrderDetail;
 import com.bosssoft.monitor.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +27,11 @@ import java.util.List;
 
 @RestController
 public class OrderController {
+    @Value("${picConfig.url}")
+    String fileUrl;
+
+    @Value("${picConfig.location}")
+    String fileLocation;
 
     @Autowired
     private OrderService orderService;
@@ -77,8 +84,7 @@ public class OrderController {
         if ((dot >-1) && (dot < (fileName.length() - 1))) {
             realName =  id + fileName.substring(dot);
         }
-        String filePath = null;
-        filePath = "/java-project/pic/" + realName;
+        String filePath = fileLocation + realName;
         File desFile = new File(filePath);
         if(!desFile.getParentFile().exists()){
             desFile.mkdirs();
@@ -89,7 +95,7 @@ public class OrderController {
             e.printStackTrace();
         }
         try {
-            orderService.updateOrderPicUrl(realName, id);
+            orderService.updateOrderPicUrl(fileUrl + realName, id);
         } catch (BusinessException e) {
             e.printStackTrace();
         }

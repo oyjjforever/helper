@@ -14,7 +14,7 @@
     </div>
     <el-upload
       class="avatar-uploader"
-      :action="'http://172.18.150.157:8989' + '/pictureUpload'"
+      :action="baseUrl"
       :data="{id: picture.picUploadId}"
       :show-file-list="false"
       :on-success="handleAvatarSuccess"
@@ -37,13 +37,14 @@ export default {
   name: 'picture-upload',
   props: {
     picture: {
-      picUploadId: null,
-      picUpload: null
+      picUploadId: null, // 图片对应的ID
+      picUpload: null // 是否显示该对话框
     }
   },
   data () {
     return {
-      imageUrl: '',
+      imageUrl: '', // 图片url
+      baseUrl: process.env.VUE_APP_BASE_URL + '/pictureUpload', // 后台接口url
       upload: {
         hasWarn: false,
         warningMsg: ''
@@ -57,16 +58,17 @@ export default {
       this.upload.warningMsg = '上传成功'
     },
     beforeAvatarUpload (file) {
-      const isJPG = file.type === 'image/jpeg'
-      const isLt2M = file.size / 1024 / 1024 < 2
-
-      if (!isJPG) {
-        this.$message.error('上传头像图片只能是 JPG 格式!')
-      }
-      if (!isLt2M) {
-        this.$message.error('上传头像图片大小不能超过 2MB!')
-      }
-      return isJPG && isLt2M
+      return true
+      // const isJPG = file.type === 'image/jpeg'
+      // const isLt2M = file.size / 1024 / 1024 < 2
+      //
+      // if (!isJPG) {
+      //   this.$message.error('上传头像图片只能是 JPG 格式!')
+      // }
+      // if (!isLt2M) {
+      //   this.$message.error('上传头像图片大小不能超过 2MB!')
+      // }
+      // return isJPG && isLt2M
     },
     closeDailog () {
       this.picture.picUpload = false

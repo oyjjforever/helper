@@ -12,7 +12,7 @@
         <span>图片详情</span>
       </div>
     <div>
-      <img class="picture" :src="'http://172.18.150.157:8989' + '/pictures/' + picture.picUrl" alt="未上传">
+      <img class="picture" :src="picture.picUrl" alt="未上传">
     </div>
     </el-dialog>
 </template>
