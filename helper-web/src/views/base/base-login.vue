@@ -8,7 +8,7 @@
           <div class="sub-title">{{appSubTitle}}</div>
         </div>
       </h2>
-      <div class="login-container hvr-float-shadow">
+      <div :class="{'login-container-mobile': isMobile, 'login-container': !isMobile, 'hvr-float-shadow': !isMobile}">
         <el-form
           ref="form"
           :model="user"
@@ -33,24 +33,18 @@
         </el-form>
       </div>
     </div>
-    <div class="bottom-panel">
-      <h6 class="browser-advice">建议浏览器：Chrome</h6>
-      <h6 class="copyright">
-        技术支持：福建博思软件股份有限公司
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        联系电话：0591-23537869
-      </h6>
-    </div>
   </div>
 </template>
 
 <script>
+import store from '@/store'
 import moment from 'moment'
 import { mapMutations } from 'vuex'
 export default {
   name: 'BaseLogin',
   data () {
     return {
+      isMobile: store.state.system.isMobile,
       appTitle: null,
       appSubTitle: null,
       loading: false,
@@ -168,7 +162,7 @@ export default {
       }
     }
     .login-container {
-      width: 500px;
+      width: 30vw;
       height: 350px;
       border-radius: 5px;
       margin: 0 auto;
@@ -177,26 +171,15 @@ export default {
       justify-content: center;
       background: linear-gradient(#fdfefe, rgba(253, 254, 254, 0.192));
     }
-  }
-  .bottom-panel {
-    position: absolute;
-    bottom: 10px;
-    left: 50%;
-    z-index: 1;
-    margin-left: -210px;
-    .browser-advice {
-      color: #fff;
-      text-align: center;
-      font-weight: 500;
-      font-size: 12px;
-      margin: 0;
-    }
-    .copyright {
-      color: #fff;
-      text-align: center;
-      font-weight: 500;
-      font-size: 12px;
-      margin: 10px 0 0 0;
+    .login-container-mobile {
+      width: 100vw;
+      height: 50vh;
+      border-radius: 5px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(#fdfefe, rgba(253, 254, 254, 0.192));
     }
   }
 }
