@@ -144,7 +144,7 @@ export default {
       display: flex;
       font-weight: 500;
       font-size: 32px;
-      margin: 100px;
+      margin: 100px auto;
       letter-spacing: 2px;
       justify-content: center;
       img {

@@ -177,6 +177,7 @@
   </div>
 </template>
 <script>
+import qs from 'qs'
 import moment from 'moment'
 import orderTimeLine from './order-timeLine'
 export default {
@@ -186,6 +187,9 @@ export default {
   },
   data () {
     return {
+      searcher: {
+        status: null
+      },
       grid: {
         rows: [],
         height: null,
@@ -249,10 +253,13 @@ export default {
   },
   methods: {
     async featchData () {
+      this.searcher.status = qs.parse(window.location.hash.substr(8)).status || null
+      console.log(qs.parse(window.location.hash.substr(8)))
       this.grid.loading = true
       let { data } = await this.$api.pagingData({
         params: {
           mapperId: 'com.bosssoft.monitor.dao.OrderMapper.queryOrder',
+          ...this.searcher,
           pageNum: this.pagging.pageNum,
           pageSize: this.pagging.pageSize
         }

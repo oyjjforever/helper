@@ -1,19 +1,19 @@
 <template>
   <div class="indicator-block">
     <el-card class="indicator-card">
-      <span>本月订单数</span>
+      <span class="indicator">本月订单数</span>
       <p class="num">
         <count-to :endVal="indicator.orderCount"></count-to>
       </p>
     </el-card>
     <el-card class="indicator-card">
-      <span>本月商品数</span>
+      <span class="indicator">本月商品数</span>
       <p class="num">
         <count-to :endVal="indicator.goodsCount"></count-to>
       </p>
     </el-card>
     <el-card class="indicator-card">
-      <span>本月总金额</span>
+      <span class="indicator">本月总金额</span>
       <p class="num">
         <count-to :endVal="indicator.amountCount"></count-to>
       </p>
@@ -61,12 +61,15 @@ export default {
     flex: 1;
     margin: 3px 5px;
     position: relative;
-    .num {
+    .indicator {
       font-size: 18px;
+    }
+    .num {
+      font-size: 25px;
       font-weight: bold;
       position: absolute;
       right: 20%;
-      bottom: 1px;
+      bottom: 0px;
     }
   }
 }

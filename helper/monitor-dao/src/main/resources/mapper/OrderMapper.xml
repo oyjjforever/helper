@@ -147,4 +147,22 @@
             #{item.id}
         </foreach>
     </delete>
+
+    <select id="queryPopularGoodsTopN" resultType="map">
+        select b.model "model", count(*) "count"
+        from order_line b
+        left join order_main a
+        on a.id = b.mainId
+        <where>
+            <if test="dayType == 'year'">
+                substr(a.orderDate,1,4) = #{dayNo}
+            </if>
+            <if test="dayType == 'month'">
+                substr(a.orderDate,1,7) = #{dayNo}
+            </if>
+        </where>
+        group by b.model
+        order by count desc
+        limit ${limit}
+    </select>
 </mapper>

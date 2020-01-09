@@ -46,7 +46,7 @@ export default {
       flex: 5;
     }
     .right-container {
-      flex: 2;
+      width: 300px;
     }
   }
 }

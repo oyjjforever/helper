@@ -1,6 +1,6 @@
 <template>
   <div class="todo-block">
-    <el-card class="box-card" v-for="(item, index) in content" :key="index" >
+    <el-card class="box-card" v-for="(item, index) in content" :key="index" @click.native="jumpToOrder(item)">
       <span class="item-num">{{ item.num }}</span>
       <span class="item-content">{{ item.type }}</span>
     </el-card>
@@ -8,6 +8,7 @@
 </template>
 
 <script>
+import router from '@/router'
 export default {
   name: 'todo-block',
   data () {
@@ -34,10 +35,14 @@ export default {
         if (item > 0) {
           this.content.push({
             type: type[index],
-            num: item
+            num: item,
+            status: index
           })
         }
       })
+    },
+    jumpToOrder (item) {
+      router.push({ path: '/order', query: { status: item.status } })
     }
   }
 }
@@ -49,6 +54,7 @@ export default {
   width: 100%;
   .box-card {
     margin: 3px 5px;
+    cursor: pointer;
     display: flex;
     flex-direction: row;
     .item-num {
