@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import qs from 'qs'
 import PictureShow from '../../components/picture-show'
 import PictureUpload from '../../components/picture-upload'
 export default {
@@ -46,6 +47,9 @@ export default {
   components: { PictureUpload, PictureShow },
   data () {
     return {
+      searcher: {
+        status: null
+      },
       picture: {
         show: false,
         name: null
@@ -58,9 +62,11 @@ export default {
   },
   methods: {
     async featchData () {
+      this.searcher.status = qs.parse(window.location.hash.substr(8)).status || null
       let { data } = await this.$api.queryData({
         params: {
-          mapperId: 'com.bosssoft.monitor.dao.OrderMapper.queryWholeOrderSelective'
+          mapperId: 'com.bosssoft.monitor.dao.OrderMapper.queryWholeOrderSelective',
+          ...this.searcher
         }
       })
       this.orders = this.formatOrderData(data.data)

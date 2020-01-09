@@ -44,7 +44,7 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
-
+        // 图片路径
         registry.addResourceHandler("/pictures/**")
                 .addResourceLocations("file:" + fileLocation);
         super.addResourceHandlers(registry);

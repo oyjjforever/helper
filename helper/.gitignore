@@ -5,7 +5,7 @@ log
 *.iml
 target/
 mybatis-generator/src/com
-monitor-startup/src/main/resources/static/helper
+monitor-startup/src/main/resources/static/
 *.class
 
 *.jar

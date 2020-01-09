@@ -1,21 +1,13 @@
 import store from '@/store'
 const mobileMenus = [
   {
-    'id': 1,
-    'code': 'test',
-    'name': 'test',
+    'id': 0,
+    'code': 'home',
+    'name': 'home',
     'target': 'component',
-    'component': 'test',
+    'component': 'home-mobile',
     'sortCode': 1
   },
-  // {
-  //   'id': 0,
-  //   'code': 'home',
-  //   'name': 'home',
-  //   'target': 'component',
-  //   'component': 'home',
-  //   'sortCode': 1
-  // },
   {
     'id': 1,
     'code': 'order',

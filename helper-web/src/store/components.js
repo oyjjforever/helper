@@ -17,6 +17,8 @@ export default {
       'delivery': () =>
         import('@/views/delivery/index' /* webpackChunkName: "delivery" */),
 
+      'home-mobile': () =>
+        import('@/views/home-mobile/index' /* webpackChunkName: "home" */),
       'order-mobile': () =>
         import('@/views/order-mobile/index' /* webpackChunkName: "order" */),
       'delivery-mobile': () =>

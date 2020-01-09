@@ -44,12 +44,16 @@ export default {
   data () {
     return {
       imageUrl: '', // 图片url
-      baseUrl: process.env.VUE_APP_BASE_URL + '/pictureUpload', // 后台接口url
+      baseUrl: '',
       upload: {
         hasWarn: false,
         warningMsg: ''
       }
     }
+  },
+  created () {
+    this.baseUrl = process.env.VUE_APP_FILE_BASE_URL + '/pictureUpload' // 后台接口url
+    console.log(process.env)
   },
   methods: {
     handleAvatarSuccess (res, file) {
