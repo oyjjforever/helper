@@ -3,7 +3,9 @@ package com.bosssoft.monitor.service.Impl;
 import com.bosssoft.monitor.common.entity.BusinessException;
 import com.bosssoft.monitor.dao.OrderMapper;
 import com.bosssoft.monitor.entity.OrderDetail;
+import com.bosssoft.monitor.entity.WholeOrder;
 import com.bosssoft.monitor.service.OrderService;
+import com.bosssoft.monitor.service.utils.PDFUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -59,5 +61,10 @@ public class OrderServiceImpl implements OrderService {
             e.printStackTrace();
             throw new BusinessException("");
         }
+    }
+
+    @Override
+    public void exportPDF(WholeOrder wholeOrder, String pdfUrl) {
+        PDFUtil.exportPDF(wholeOrder, pdfUrl);
     }
 }

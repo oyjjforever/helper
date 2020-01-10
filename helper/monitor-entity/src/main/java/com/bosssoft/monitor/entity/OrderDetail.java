@@ -13,7 +13,7 @@ public class OrderDetail {
     private String model;
     private String color;
     private String format;
-    private double price;
+    private int price;
     private int num;
     private int status;
     private String operation;
@@ -58,11 +58,11 @@ public class OrderDetail {
         this.format = format;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 
@@ -90,7 +90,7 @@ public class OrderDetail {
         this.operation = operation;
     }
 
-    public OrderDetail(String mainId, String id, String model, String color, String format, double price, int num, int status, String operation) {
+    public OrderDetail(String mainId, String id, String model, String color, String format, int price, int num, int status, String operation) {
         this.mainId = mainId;
         this.id = id;
         this.model = model;

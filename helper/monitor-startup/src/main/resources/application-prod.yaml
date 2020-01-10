@@ -12,3 +12,4 @@ spring:
 
 picConfig.url: http://106.14.181.20:8989/pictures/
 picConfig.location: /java-project/pic/
+pdfConfig.location: /java-project/pdf/

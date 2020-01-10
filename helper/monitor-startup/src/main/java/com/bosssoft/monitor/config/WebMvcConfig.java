@@ -23,7 +23,9 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
     @Autowired
     Interceptor interceptor;
     @Value("${picConfig.location}")
-    String fileLocation;
+    String picLocation;
+    @Value("${pdfConfig.location}")
+    String pdfLocation;
 
     @Bean
     public HttpPutFormContentFilter httpPutFormContentFilter() {
@@ -46,7 +48,10 @@ public class WebMvcConfig extends WebMvcConfigurationSupport {
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
         // 图片路径
         registry.addResourceHandler("/pictures/**")
-                .addResourceLocations("file:" + fileLocation);
+                .addResourceLocations("file:" + picLocation);
+        // PDF路径
+        registry.addResourceHandler("/pdfs/**")
+                .addResourceLocations("file:" + pdfLocation);
         super.addResourceHandlers(registry);
     }
 

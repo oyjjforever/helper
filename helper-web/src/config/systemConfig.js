@@ -35,9 +35,14 @@ export default {
     method: 'menu',
     url: '/api/v1/menu'
   }, {
-    name: '',
+    name: '批量更新',
     method: 'modifyOrderDetail',
     url: '/modifyOrderDetail',
+    type: 'post'
+  }, {
+    name: '导出PDF',
+    method: 'exportPDF',
+    url: '/exportPDF',
     type: 'post'
   }
   ]

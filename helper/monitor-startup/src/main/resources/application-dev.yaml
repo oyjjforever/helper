@@ -12,3 +12,4 @@ spring:
 
 picConfig.url: http://172.18.150.157:8989/pictures/
 picConfig.location: I:/test/
+pdfConfig.location: I:/test/

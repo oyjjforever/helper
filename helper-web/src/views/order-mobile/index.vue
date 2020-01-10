@@ -14,6 +14,8 @@
         <el-button type="success" @click="uploadPicture(item)">上传图片</el-button>
         <picture-upload :picture="item.picture" @refreshOrder="featchData"></picture-upload>
         <el-button type="primary" @click="showPicture(item)">查看图片</el-button>
+        <el-button type="danger" @click="exportPdf(item)">导出PDF</el-button>
+        <el-button type="danger" @click="showPdf(item)">查看PDF</el-button>
         <picture-show :picture="item.picture"></picture-show>
         <div>联系方式：{{item.phone}}</div>
         <div>订单时间：{{item.orderDate}}</div>
@@ -24,7 +26,7 @@
           border
           stripe
           ref="table"
-          :data="item.detail"
+          :data="item.details"
           highlight-current-row
         >
           <el-table-column prop="model" label="型号" align="left" show-overflow-tooltip></el-table-column>
@@ -87,16 +89,17 @@ export default {
             remark: item.remark,
             status: item.status,
             picture: {
-              picUrl: item.picUrl,
+              picUrl: process.env.VUE_APP_FILE_BASE_URL + '/pictures/' + item.id + '.jpg',
               picShow: false,
               picUpload: false,
               picUploadId: item.id
             },
-            detail: []
+            pdfUrl: process.env.VUE_APP_FILE_BASE_URL + '/pdfs/' + item.id + '.pdf',
+            details: []
           }
           checked[item.id] = order
         }
-        checked[item.id]['detail'].push({
+        checked[item.id]['details'].push({
           model: item.model,
           color: item.color,
           format: item.format,
@@ -124,6 +127,24 @@ export default {
     },
     uploadPicture (item) {
       item.picture.picUpload = true
+    },
+    async exportPdf (item) {
+      console.log(item)
+      await this.$api.exportPDF({
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        },
+        data: {
+          data: JSON.stringify(item)
+        }
+      })
+    },
+    showPdf (item) {
+      // let a = document.createElement('a')
+      // a.href = item.pdfUrl
+      // a.click()
+      window.location.href = item.pdfUrl
+      // window.open(item.pdfUrl, '_blank')
     }
   }
 }

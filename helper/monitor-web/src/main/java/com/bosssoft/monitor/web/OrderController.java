@@ -5,7 +5,9 @@ import com.bosssoft.monitor.common.entity.BusinessException;
 import com.bosssoft.monitor.common.entity.ResponseResult;
 import com.bosssoft.monitor.common.utils.YamlUtil;
 import com.bosssoft.monitor.entity.OrderDetail;
+import com.bosssoft.monitor.entity.WholeOrder;
 import com.bosssoft.monitor.service.OrderService;
+import com.bosssoft.monitor.service.utils.PDFUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.ResourceUtils;
@@ -27,11 +29,14 @@ import java.util.List;
 
 @RestController
 public class OrderController {
+    @Value("${pdfConfig.location}")
+    String pdfLocation;
+
     @Value("${picConfig.url}")
     String fileUrl;
 
     @Value("${picConfig.location}")
-    String fileLocation;
+    String picLocation;
 
     @Autowired
     private OrderService orderService;
@@ -84,7 +89,7 @@ public class OrderController {
         if ((dot >-1) && (dot < (fileName.length() - 1))) {
             realName =  id + fileName.substring(dot);
         }
-        String filePath = fileLocation + realName;
+        String filePath = picLocation + realName;
         File desFile = new File(filePath);
         if(!desFile.getParentFile().exists()){
             desFile.mkdirs();
@@ -100,6 +105,23 @@ public class OrderController {
             e.printStackTrace();
         }
     }
-
+    /**
+     * 功能说明:导出PDF
+     * @return
+     */
+    @PostMapping("exportPDF")
+    public ResponseResult exportPDF(@RequestBody String wholeOrderStr) throws UnsupportedEncodingException {
+        try {
+            String jsonStr = URLDecoder.decode(wholeOrderStr, "UTF-8");
+            jsonStr = jsonStr.substring(5);
+            WholeOrder wholeOrder = JSON.parseObject(jsonStr,WholeOrder.class);
+            System.out.println(wholeOrder);
+            PDFUtil.exportPDF(wholeOrder,pdfLocation);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String message = "";
+        return ResponseResult.success(message);
+    }
 
 }
