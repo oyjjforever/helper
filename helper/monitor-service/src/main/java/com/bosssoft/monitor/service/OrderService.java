@@ -18,5 +18,5 @@ public interface OrderService {
     void updateOrderDetail(List<OrderDetail> orderDetails) throws BusinessException;
     void deleteOrderDetail(List<OrderDetail> orderDetails) throws BusinessException;
     void updateOrderPicUrl(String picUrl, String id) throws BusinessException;
-    void exportPDF(WholeOrder wholeOrder, String pdfUrl);
+    void exportPDF(WholeOrder wholeOrder, String pdfLocation, String fontLocation);
 }

@@ -64,7 +64,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void exportPDF(WholeOrder wholeOrder, String pdfUrl) {
-        PDFUtil.exportPDF(wholeOrder, pdfUrl);
+    public void exportPDF(WholeOrder wholeOrder, String pdfLocation, String fontLocation) {
+        PDFUtil.exportPDF(wholeOrder, pdfLocation,fontLocation);
     }
 }

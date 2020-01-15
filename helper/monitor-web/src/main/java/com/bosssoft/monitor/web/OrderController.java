@@ -38,6 +38,8 @@ public class OrderController {
     @Value("${picConfig.location}")
     String picLocation;
 
+    @Value("${fontConfig.location}")
+    String fontLocation;
     @Autowired
     private OrderService orderService;
 
@@ -116,7 +118,7 @@ public class OrderController {
             jsonStr = jsonStr.substring(5);
             WholeOrder wholeOrder = JSON.parseObject(jsonStr,WholeOrder.class);
             System.out.println(wholeOrder);
-            PDFUtil.exportPDF(wholeOrder,pdfLocation);
+            PDFUtil.exportPDF(wholeOrder,pdfLocation,fontLocation);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

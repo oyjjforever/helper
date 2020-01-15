@@ -3,14 +3,12 @@ package com.bosssoft.monitor.service.utils;
 import com.bosssoft.monitor.entity.OrderDetail;
 import com.bosssoft.monitor.entity.WholeOrder;
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.BaseFont;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.*;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 
 /**
  * @author ouyangjunjie
@@ -22,38 +20,31 @@ import java.io.FileOutputStream;
 public class PDFUtil {
     private static Document document;
     private static Font font;
-    private static WholeOrder wholeOrder;
-    public static void exportPDF(WholeOrder w, String pdfUrl) {
+    public static void exportPDF(WholeOrder wholeOrder, String pdfUrl,String fontLocation) {
         try{
-            wholeOrder = w;
-            initPdf(pdfUrl);
-            initTable();
+            String fontFamily = "simfang.ttf";
+            // font = FontFactory.getFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED,10f, Font.NORMAL, BaseColor.BLACK);
+            font = new Font(BaseFont.createFont(fontLocation + fontFamily, BaseFont.IDENTITY_H,BaseFont.NOT_EMBEDDED));
+            //Step 1—Create a Document.
+            document = new Document();
+            //Step 2—Get a PdfWriter instance.
+            PdfWriter.getInstance(document, new FileOutputStream(pdfUrl + wholeOrder.getId() + ".pdf"));
+            //Step 3—Open the Document.
+            document.open();
+            initTable(wholeOrder);
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         } finally{
             document.close();
         }
 
     }
 
-    private static void initPdf(String pdfUrl) {
-        try {
-        font = FontFactory.getFont("STSong-Light", "UniGB-UCS2-H", BaseFont.NOT_EMBEDDED,10f, Font.NORMAL, BaseColor.BLACK);
-        //Step 1—Create a Document.
-        document = new Document();
-        //Step 2—Get a PdfWriter instance.
-        PdfWriter.getInstance(document, new FileOutputStream(pdfUrl + wholeOrder.getId() + ".pdf"));
-        //Step 3—Open the Document.
-        document.open();
-        //Step 4—Add content.
-        // document.add(new Paragraph("Hello World"));
-        //Step 5—Close the Document.
-        // document.close();
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-    private static void initTable() {
+    private static void initTable(WholeOrder wholeOrder) {
         int fullColspan = 30;
         int labelColspan = 4;
         int valueColspan = 11;

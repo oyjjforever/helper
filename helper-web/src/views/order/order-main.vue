@@ -254,7 +254,7 @@ export default {
   methods: {
     async featchData () {
       this.searcher.status = qs.parse(window.location.hash.substr(8)).status || null
-      console.log(qs.parse(window.location.hash.substr(8)))
+      // console.log(qs.parse(window.location.hash.substr(8)))
       this.grid.loading = true
       let { data } = await this.$api.pagingData({
         params: {

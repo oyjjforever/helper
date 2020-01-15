@@ -16,7 +16,7 @@
         <el-button type="primary" @click="showPicture(item)">查看图片</el-button>
         <el-button type="danger" @click="exportPdf(item)">导出PDF</el-button>
         <el-button type="danger" @click="showPdf(item)">查看PDF</el-button>
-        <pdf :src="item.pdfUrl"></pdf>
+        <pdf-show :pdf="item.pdf"></pdf-show>
         <picture-show :picture="item.picture"></picture-show>
         <div>联系方式：{{item.phone}}</div>
         <div>订单时间：{{item.orderDate}}</div>
@@ -43,12 +43,12 @@
 
 <script>
 import qs from 'qs'
-import pdf from 'vue-pdf'
 import PictureShow from '../../components/picture-show'
 import PictureUpload from '../../components/picture-upload'
+import PdfShow from '../../components/pdf-show'
 export default {
   name: 'index',
-  components: { PictureUpload, PictureShow, pdf },
+  components: { PdfShow, PictureUpload, PictureShow },
   data () {
     return {
       searcher: {
@@ -97,7 +97,10 @@ export default {
               picUpload: false,
               picUploadId: item.id
             },
-            pdfUrl: process.env.VUE_APP_FILE_BASE_URL + '/pdfs/' + item.id + '.pdf',
+            pdf: {
+              pdfUrl: process.env.VUE_APP_FILE_BASE_URL + '/pdfs/' + item.id + '.pdf',
+              pdfShow: false
+            },
             details: []
           }
           checked[item.id] = order
@@ -132,7 +135,7 @@ export default {
       item.picture.picUpload = true
     },
     async exportPdf (item) {
-      console.log(item)
+      // console.log(item)
       await this.$api.exportPDF({
         headers: {
           'Content-Type': 'application/json;charset=UTF-8'
@@ -143,10 +146,11 @@ export default {
       })
     },
     showPdf (item) {
+      item.pdf.pdfShow = true
       // let a = document.createElement('a')
       // a.href = item.pdfUrl
       // a.click()
-      window.location.href = item.pdfUrl
+      // window.location.href = item.pdfUrl
       // window.open(item.pdfUrl, '_blank')
     }
   }
