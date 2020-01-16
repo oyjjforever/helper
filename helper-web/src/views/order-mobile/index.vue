@@ -3,26 +3,35 @@
     <el-collapse accordion>
       <el-collapse-item v-for="(item, index) in orders" :key="index">
         <template slot="title">
-          <span style="margin-right: 10px">
-            <el-tag v-if="item.status === '0'" type="success">已完成</el-tag>
-            <el-tag v-else-if="item.status === '1'" type="danger">待付款</el-tag>
-            <el-tag v-else-if="item.status === '2'" type="danger">待尾款</el-tag>
-            <el-tag v-else-if="item.status === '3'" type="danger">待送货</el-tag>
-          </span>
-          {{item.name + ' - ' + item.address}}
+          <div class="item-title" @click="toggleCollapse(item)">
+            <div class="content-area">
+              <span style="margin-right: 10px">
+                <el-tag v-if="item.main.status === '0'" type="success">已完成</el-tag>
+                <el-tag v-else-if="item.main.status === '1'" type="danger">待付款</el-tag>
+                <el-tag v-else-if="item.main.status === '2'" type="danger">待尾款</el-tag>
+                <el-tag v-else-if="item.main.status === '3'" type="danger">待送货</el-tag>
+              </span>
+              {{item.main.name + ' - ' + item.main.address}}
+            </div>
+            <span class="button-area">
+              <transition name="el-zoom-in-top">
+                <i v-show="item.show" class="el-icon-picture" @click.stop="showPicture(item)"></i>
+              </transition>
+              <transition name="el-zoom-in-bottom">
+                <i v-show="item.show" class="el-icon-s-order" @click.stop="showPdf(item)"></i>
+              </transition>
+            </span>
+          </div>
         </template>
         <el-button type="success" @click="uploadPicture(item)">上传图片</el-button>
         <picture-upload :picture="item.picture" @refreshOrder="featchData"></picture-upload>
-        <el-button type="primary" @click="showPicture(item)">查看图片</el-button>
-        <el-button type="danger" @click="exportPdf(item)">导出PDF</el-button>
-        <el-button type="danger" @click="showPdf(item)">查看PDF</el-button>
-        <pdf-show :pdf="item.pdf"></pdf-show>
+        <pdf-dialog :pdf="item.pdf" :content="item.main"></pdf-dialog>
         <picture-show :picture="item.picture"></picture-show>
-        <div>联系方式：{{item.phone}}</div>
-        <div>订单时间：{{item.orderDate}}</div>
-        <div>送货时间：{{item.sendDate}}</div>
-        <div>总金额：{{item.amount}}</div>
-        <div>备注：{{item.remark}}</div>
+        <div>联系方式：{{item.main.phone}}</div>
+        <div>订单时间：{{item.main.orderDate}}</div>
+        <div>送货时间：{{item.main.sendDate}}</div>
+        <div>总金额：{{item.main.amount}}</div>
+        <div>备注：{{item.main.remark}}</div>
         <el-table
           border
           stripe
@@ -45,10 +54,10 @@
 import qs from 'qs'
 import PictureShow from '../../components/picture-show'
 import PictureUpload from '../../components/picture-upload'
-import PdfShow from '../../components/pdf-show'
+import PdfDialog from '../../components/pdf-dialog'
 export default {
   name: 'index',
-  components: { PdfShow, PictureUpload, PictureShow },
+  components: { PdfDialog, PictureUpload, PictureShow },
   data () {
     return {
       searcher: {
@@ -82,15 +91,17 @@ export default {
       data.forEach(item => {
         if (!checked[item.id]) {
           let order = {
-            id: item.id,
-            name: item.name,
-            phone: item.phone,
-            address: item.address,
-            orderDate: item.orderDate,
-            sendDate: item.sendDate,
-            amount: item.amount,
-            remark: item.remark,
-            status: item.status,
+            main: {
+              id: item.id,
+              name: item.name,
+              phone: item.phone,
+              address: item.address,
+              orderDate: item.orderDate,
+              sendDate: item.sendDate,
+              amount: item.amount,
+              remark: item.remark,
+              status: item.status
+            },
             picture: {
               picUrl: process.env.VUE_APP_FILE_BASE_URL + '/pictures/' + item.id + '.jpg',
               picShow: false,
@@ -101,6 +112,7 @@ export default {
               pdfUrl: process.env.VUE_APP_FILE_BASE_URL + '/pdfs/' + item.id + '.pdf',
               pdfShow: false
             },
+            show: false,
             details: []
           }
           checked[item.id] = order
@@ -119,6 +131,10 @@ export default {
       }
       return formatedData
     },
+    toggleCollapse (item) {
+      item.show = !item.show
+      console.log(item.show)
+    },
     async featchPicture (id) {
       let { data } = await this.$api.queryData({
         params: {
@@ -134,23 +150,12 @@ export default {
     uploadPicture (item) {
       item.picture.picUpload = true
     },
-    async exportPdf (item) {
-      // console.log(item)
-      await this.$api.exportPDF({
-        headers: {
-          'Content-Type': 'application/json;charset=UTF-8'
-        },
-        data: {
-          data: JSON.stringify(item)
-        }
-      })
-    },
     showPdf (item) {
       item.pdf.pdfShow = true
       // let a = document.createElement('a')
       // a.href = item.pdfUrl
       // a.click()
-      // window.location.href = item.pdfUrl
+      // window.location.href = item.pdfUrl  本网页打开
       // window.open(item.pdfUrl, '_blank')
     }
   }
@@ -161,5 +166,20 @@ export default {
 .order-mobile-index {
   width: 100%;
   height: 100%;
+  .item-title {
+    width: 100%;
+    display: flex;
+    .content-area {
+      flex: 5;
+    }
+    .button-area {
+      flex: 1;
+      margin-left: auto;
+
+      i {
+        font-size: 25px;
+      }
+    }
+  }
 }
 </style>
