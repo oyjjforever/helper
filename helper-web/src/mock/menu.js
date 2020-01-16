@@ -17,7 +17,7 @@ const mobileMenus = [
     'sortCode': 1
   },
   {
-    'id': 1,
+    'id': 2,
     'code': 'delivery',
     'name': 'delivery',
     'target': 'component',
@@ -44,7 +44,7 @@ const pcMenus = [
     'sortCode': 1
   },
   {
-    'id': 1,
+    'id': 2,
     'code': 'delivery',
     'name': 'delivery',
     'target': 'component',

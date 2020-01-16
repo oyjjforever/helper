@@ -1,17 +1,10 @@
 <template>
-  <el-dialog
-    v-dialog
-    width="100vw"
+  <el-drawer
+    title="图片上传"
     v-if="picture.picUpload"
     :visible.sync="picture.picUpload"
-    :before-close="closeDailog"
-    :modal-append-to-body="false"
-    :close-on-click-modal="false"
+    size="50%"
   >
-    <div slot="title" class="title">
-      <i></i>
-      <span>图片上传</span>
-    </div>
     <el-upload
       class="avatar-uploader"
       :action="baseUrl"
@@ -26,10 +19,7 @@
       <i class="el-icon-circle-check"></i>
       <span>{{upload.warningMsg}}</span>
     </div>
-    <div slot="footer">
-      <el-button type="primary" @click="closeDailog" icon="fa fa-save">&nbsp;关闭</el-button>
-    </div>
-  </el-dialog>
+  </el-drawer>
 </template>
 
 <script>
@@ -38,7 +28,9 @@ export default {
   props: {
     picture: {
       picUploadId: null, // 图片对应的ID
-      picUpload: null // 是否显示该对话框
+      picUpload: null, // 是否显示该对话框
+      picUrl: null,
+      picShow: null
     }
   },
   data () {
@@ -53,7 +45,7 @@ export default {
   },
   created () {
     this.baseUrl = process.env.VUE_APP_FILE_BASE_URL + '/pictureUpload' // 后台接口url
-    // console.log(process.env)
+    console.log(this.picture)
   },
   methods: {
     handleAvatarSuccess (res, file) {

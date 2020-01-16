@@ -2,8 +2,8 @@
     <el-dialog
       v-dialog
       width="100vw"
-      v-if="pdf.pdfShow"
-      :visible.sync="pdf.pdfShow"
+      v-if="pdf.show"
+      :visible.sync="pdf.show"
       :modal-append-to-body="false"
       :close-on-click-modal="false"
     >
@@ -14,7 +14,7 @@
         <el-button type="danger" @click="downloadPdf()">下载PDF</el-button>
       </div>
     <div>
-      <pdf class="pdf" :src="pdf.pdfUrl"></pdf>
+      <pdf class="pdf" :src="baseUrl+ pdf.id + '.pdf'"></pdf>
     </div>
     </el-dialog>
 </template>
@@ -26,12 +26,21 @@ export default {
   components: {
     pdf
   },
-  props: {
-    content: {},
-    pdf: {
-      pdfUrl: null,
-      pdfShow: null
+  data () {
+    return {
+      baseUrl: null
     }
+  },
+  props: {
+    pdf: {
+      id: null,
+      show: null,
+      content: {}
+    }
+  },
+  created () {
+    this.baseUrl = process.env.VUE_APP_FILE_BASE_URL + '/pdfs/'
+    console.log(this.pdf)
   },
   methods: {
     async exportPdf () {
@@ -41,13 +50,13 @@ export default {
           'Content-Type': 'application/json;charset=UTF-8'
         },
         data: {
-          data: JSON.stringify(this.content)
+          data: JSON.stringify(this.pdf.content)
         }
       })
     },
     downloadPdf () {
       let a = document.createElement('a')
-      a.href = this.pdf.pdfUrl
+      a.href = this.baseUrl
       a.click()
     }
   }

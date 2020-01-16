@@ -23,10 +23,6 @@
             </span>
           </div>
         </template>
-        <el-button type="success" @click="uploadPicture(item)">上传图片</el-button>
-        <picture-upload :picture="item.picture" @refreshOrder="featchData"></picture-upload>
-        <pdf-dialog :pdf="item.pdf" :content="item.main"></pdf-dialog>
-        <picture-show :picture="item.picture"></picture-show>
         <div>联系方式：{{item.main.phone}}</div>
         <div>订单时间：{{item.main.orderDate}}</div>
         <div>送货时间：{{item.main.sendDate}}</div>
@@ -47,25 +43,31 @@
         </el-table>
       </el-collapse-item>
     </el-collapse>
+    <picture-dialog :pic="picture"></picture-dialog>
+    <pdf-dialog :pdf="pdf"></pdf-dialog>
   </div>
 </template>
 
 <script>
 import qs from 'qs'
-import PictureShow from '../../components/picture-show'
-import PictureUpload from '../../components/picture-upload'
+import PictureDialog from '../../components/picture-dialog'
 import PdfDialog from '../../components/pdf-dialog'
 export default {
   name: 'index',
-  components: { PdfDialog, PictureUpload, PictureShow },
+  components: { PdfDialog, PictureDialog },
   data () {
     return {
       searcher: {
         status: null
       },
       picture: {
+        id: null,
+        show: false
+      },
+      pdf: {
+        id: null,
         show: false,
-        name: null
+        content: {}
       },
       orders: []
     }
@@ -83,7 +85,6 @@ export default {
         }
       })
       this.orders = this.formatOrderData(data.data)
-      console.log(this.orders)
     },
     formatOrderData (data) {
       let formatedData = []
@@ -101,16 +102,6 @@ export default {
               amount: item.amount,
               remark: item.remark,
               status: item.status
-            },
-            picture: {
-              picUrl: process.env.VUE_APP_FILE_BASE_URL + '/pictures/' + item.id + '.jpg',
-              picShow: false,
-              picUpload: false,
-              picUploadId: item.id
-            },
-            pdf: {
-              pdfUrl: process.env.VUE_APP_FILE_BASE_URL + '/pdfs/' + item.id + '.pdf',
-              pdfShow: false
             },
             show: false,
             details: []
@@ -133,25 +124,24 @@ export default {
     },
     toggleCollapse (item) {
       item.show = !item.show
-      console.log(item.show)
-    },
-    async featchPicture (id) {
-      let { data } = await this.$api.queryData({
-        params: {
-          mapperId: 'com.bosssoft.monitor.dao.OrderMapper.queryOrder',
-          id: id
+      this.orders.forEach(i => {
+        if (i.main.id !== item.main.id) {
+          i.show = false
         }
       })
-      this.picture.name = data.data[0].picUrl
     },
     showPicture (item) {
-      item.picture.picShow = true
-    },
-    uploadPicture (item) {
-      item.picture.picUpload = true
+      this.picture = {
+        id: item.main.id,
+        show: true
+      }
     },
     showPdf (item) {
-      item.pdf.pdfShow = true
+      this.pdf = {
+        id: item.main.id,
+        show: true,
+        content: item.main
+      }
       // let a = document.createElement('a')
       // a.href = item.pdfUrl
       // a.click()
