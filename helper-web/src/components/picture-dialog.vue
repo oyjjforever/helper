@@ -16,22 +16,22 @@
         <el-button class="title-button" v-show="model === 'upload'" type="primary" @click="model = 'show'">返回</el-button>
       </div>
     <div v-if="model === 'show'">
-      <img class="picture" :src="showPic.baseUrl + pic.id + '.jpg'" alt="未上传">
+      <img class="picture" :src="picShow.baseUrl + pic.id + '.jpg'" alt="未上传">
     </div>
     <div v-if="model === 'upload'">
       <el-upload
         class="avatar-uploader"
-        :action="uploadPic.baseUrl"
+        :action="picUpload.baseUrl"
         :data="{id: pic.id}"
         :show-file-list="false"
         :on-success="handleAvatarSuccess"
       >
-        <img v-if="uploadPic.imageUrl" :src="uploadPic.imageUrl" class="avatar">
+        <img v-if="picUpload.imageUrl" :src="picUpload.imageUrl" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
-      <div class="warningArea" v-show="uploadPic.hasWarn">
+      <div class="warningArea" v-show="picUpload.hasWarn">
         <i class="el-icon-circle-check"></i>
-        <span>{{uploadPic.warningMsg}}</span>
+        <span>{{picUpload.warningMsg}}</span>
       </div>
     </div>
     </el-dialog>
@@ -40,17 +40,17 @@
 
 <script>
 export default {
-  name: 'picture-show',
+  name: 'picture-dialog',
   data () {
     return {
       model: 'show',
-      uploadPic: {
+      picUpload: {
         baseUrl: null,
         imageUrl: '', // 图片url
         hasWarn: false,
         warningMsg: ''
       },
-      showPic: {
+      picShow: {
         baseUrl: null
       }
     }
@@ -59,14 +59,14 @@ export default {
     pic: {}
   },
   created () {
-    this.uploadPic.baseUrl = process.env.VUE_APP_FILE_BASE_URL + '/pictureUpload' // 后台接口url
-    this.showPic.baseUrl = process.env.VUE_APP_FILE_BASE_URL + '/pictures/'
+    this.picUpload.baseUrl = process.env.VUE_APP_FILE_BASE_URL + '/pictureUpload' // 后台接口url
+    this.picShow.baseUrl = process.env.VUE_APP_FILE_BASE_URL + '/pictures/'
   },
   methods: {
     handleAvatarSuccess (res, file) {
-      this.uploadPic.imageUrl = URL.createObjectURL(file.raw)
-      this.uploadPic.hasWarn = true
-      this.uploadPic.warningMsg = '上传成功'
+      this.picUpload.imageUrl = URL.createObjectURL(file.raw)
+      this.picUpload.hasWarn = true
+      this.picUpload.warningMsg = '上传成功'
     }
   }
 }
