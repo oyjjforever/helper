@@ -10,8 +10,8 @@
       <div slot="title" class="title">
         <i></i>
         <span>PDF详情</span>
-        <el-button type="danger" @click="exportPdf()">导出PDF</el-button>
-        <el-button type="danger" @click="downloadPdf()">下载PDF</el-button>
+        <el-button type="danger" @click="exportPdf()">重新生成</el-button>
+        <el-button type="primary" @click="downloadPdf()">下载</el-button>
       </div>
     <div>
       <pdf class="pdf" :src="baseUrl+ pdf.id + '.pdf'"></pdf>
@@ -40,7 +40,6 @@ export default {
   },
   created () {
     this.baseUrl = process.env.VUE_APP_FILE_BASE_URL + '/pdfs/'
-    console.log(this.pdf)
   },
   methods: {
     async exportPdf () {
@@ -58,6 +57,11 @@ export default {
       let a = document.createElement('a')
       a.href = this.baseUrl
       a.click()
+      // let a = document.createElement('a')
+      // a.href = item.pdfUrl
+      // a.click()
+      // window.location.href = item.pdfUrl  本网页打开
+      // window.open(item.pdfUrl, '_blank')
     }
   }
 }

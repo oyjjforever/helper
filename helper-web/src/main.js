@@ -12,6 +12,8 @@ import VueTouchRipple from 'vue-touch-ripple'
 import 'vue-touch-ripple/component.css'
 import '@/assets/index.scss'
 import '@/mock'
+import VueTouch from 'vue-touch'
+Vue.use(VueTouch, { name: 'v-touch' })
 
 Vue.use(VueTouchRipple)
 Vue.use(Element, { size: 'small' })

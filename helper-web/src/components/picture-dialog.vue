@@ -80,7 +80,7 @@ export default {
 .title {
   display: flex;
   .title-button {
-    margin-left: 50%;
+    margin-left: 40%;
   }
 }
 .warningArea {

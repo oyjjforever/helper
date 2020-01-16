@@ -17,6 +17,14 @@ const mobileMenus = [
     'sortCode': 1
   },
   {
+    'id': 1,
+    'code': 'order-plus',
+    'name': 'order-plus',
+    'target': 'component',
+    'component': 'order-mobile-plus',
+    'sortCode': 1
+  },
+  {
     'id': 2,
     'code': 'delivery',
     'name': 'delivery',

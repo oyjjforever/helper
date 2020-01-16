@@ -22,7 +22,9 @@ export default {
       'order-mobile': () =>
         import('@/views/order-mobile/index' /* webpackChunkName: "order" */),
       'delivery-mobile': () =>
-        import('@/views/delivery-mobile/index' /* webpackChunkName: "delivery" */)
+        import('@/views/delivery-mobile/index' /* webpackChunkName: "delivery" */),
+      'order-mobile-plus': () =>
+        import('@/views/order-mobile/index-plus' /* webpackChunkName: "order" */)
     }
   }
 }
