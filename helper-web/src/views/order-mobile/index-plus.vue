@@ -66,7 +66,8 @@ export default {
         start: 0,
         move: 0,
         index: 0,
-        distance: 0
+        distance: 0,
+        left: 0
       },
       picture: {
         id: null,
@@ -94,7 +95,6 @@ export default {
           } else { // 正向滑动
             marginLeft = -120 + distance / 2 + 'px'
           }
-          console.log(marginLeft)
           return {
             marginLeft: `calc( ${marginLeft} )`
           }
@@ -191,25 +191,42 @@ export default {
       }
     },
     touchstart (e, index) {
+      this.touch.left = this.$refs['contentMain' + index][0].offsetLeft - 10
       this.touch.start = e.targetTouches[0].clientX
       this.touch.index = index
+      console.log('left:' + this.touch.left)
     },
     touchmove (e, index) {
-      if (e.targetTouches[0].clientX - this.touch.start < 241) {
-        this.touch.move = e.targetTouches[0].clientX
-      }
+      // 获取移动距离
+      this.touch.move = e.targetTouches[0].clientX
       this.touch.distance = this.touch.move - this.touch.start
-      this.touch.index = index
-      console.log('distance:' + this.touch.distance)
-    },
-    touchend (e, index) {
-      if (this.touch.distance < 120) {
+      if (this.touch.left === 0 && this.touch.distance < 0) {
         this.touch.distance = 0
-      } else if (this.touch.distance >= 120 && this.touch.distance <= 240) {
+      }
+      // 向右移动距离最大240
+      if (this.touch.distance >= 240) {
         this.touch.distance = 240
       }
+      // 向左移动距离最大240
+      if (this.touch.distance <= -240) {
+        this.touch.distance = -240
+      }
+      console.log('distance:' + this.touch.distance)
       this.touch.index = index
-      console.log('start:' + this.touch.start)
+    },
+    touchend (e, index) {
+      if (this.touch.left === 0 && this.touch.distance < 0) {
+        this.touch.distance = 0
+      } else {
+        if ((this.touch.distance >= 0 && this.touch.distance < 120) || (this.touch.distance < -120) || this.touch.move === 0) {
+          this.touch.distance = 0
+          console.log('toleft')
+        } else {
+          this.touch.distance = 240
+          console.log('toright')
+        }
+      }
+      this.touch.index = index
       this.touch.move = 0
     }
   }
