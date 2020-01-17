@@ -220,38 +220,44 @@ export default {
 .order-mobile-index {
   width: 100%;
   height: 100%;
-  .content-area {
+  .item-title {
     width: 100%;
-    .content-main {
-      position:static;
-      z-index: 1;
-      display: inline-block;
-      background-color: #ffffff;
-      width: 500px;
-    }
-    .content-button {
-      position:static;
-      z-index: -1;
-      width: 60px;
-      height: 100%;
-      div {
+    .content-area {
+      width: 100%;
+      .content-main {
+        position:static;
+        z-index: 1;
+        display: inline-block;
+        background-color: #ffffff;
+        width: calc(100% - 120px);
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .content-button {
+        position:static;
+        z-index: -1;
         width: 60px;
         height: 100%;
-        display: inline-block;
-        span {
-          font-size: 12px;
-          margin-left: 10px;
-          margin-right: 5px;
-          color: #ffffff;
+        div {
+          width: 60px;
+          height: 100%;
+          display: inline-block;
+          span {
+            font-size: 12px;
+            margin-left: 10px;
+            margin-right: 5px;
+            color: #ffffff;
+          }
         }
-      }
-      .pic-button {
-        background-color: #a2a2a2;
-      }
-      .pdf-button {
-        background-color: #eaeaea;
+        .pic-button {
+          background-color: #a2a2a2;
+        }
+        .pdf-button {
+          background-color: #eaeaea;
+        }
       }
     }
   }
+
 }
 </style>
