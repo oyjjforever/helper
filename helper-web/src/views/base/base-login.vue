@@ -172,7 +172,7 @@ export default {
       background: linear-gradient(#fdfefe, rgba(253, 254, 254, 0.192));
     }
     .login-container-mobile {
-      width: 90vw;
+      width: 100vw;
       height: 50vh;
       border-radius: 5px;
       margin: 0 auto;

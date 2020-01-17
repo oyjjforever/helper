@@ -6,11 +6,11 @@
             <div class="item-title" @click="toggleCollapse(item)">
               <div class="content-area" @touchstart="touchstart($event,index)" @touchmove="touchmove($event,index)" @touchend="touchend($event,index)">
                 <div class="content-button" :style="buttonStyle(index)">
-                  <div class="pic-button">
-                    <span class="el-icon-picture" @click.stop="showPicture(item)"></span>图片
+                  <div class="pic-button" @click.stop="showPicture(item)">
+                    <span class="el-icon-picture" ></span>图片
                   </div>
-                  <div class="pdf-button">
-                    <span class="el-icon-s-order" @click.stop="showPdf(item)"></span>PDF
+                  <div class="pdf-button" @click.stop="showPdf(item)">
+                    <span class="el-icon-s-order"></span>PDF
                   </div>
                 </div>
                 <div class="content-main" :style="contentStyle(index)" :ref="'contentMain' + index">
@@ -218,10 +218,10 @@ export default {
       if (this.touch.left === 0 && this.touch.distance < 0) {
         this.touch.distance = 0
       } else {
-        if ((this.touch.distance >= 0 && this.touch.distance < 120) || (this.touch.distance < -120) || this.touch.move === 0) {
+        if ((this.touch.distance >= 0 && this.touch.distance < 120) || (this.touch.distance < -120)) {
           this.touch.distance = 0
           console.log('toleft')
-        } else {
+        } else if (this.touch.move !== 0) {
           this.touch.distance = 240
           console.log('toright')
         }
