@@ -4,26 +4,24 @@
       <el-collapse-item v-for="(item, index) in orders" :key="index">
         <template slot="title">
             <div class="item-title" @click="toggleCollapse(item)">
-              <div class="content-area">
-                <v-touch v-on:swipeleft="swiperleft(item)" v-on:swiperight="swiperright(item)">
-                  <transition name="el-fade-in">
-                    <span v-show="!item.showButton">
-                      <span style="margin-right: 10px">
-                        <el-tag v-if="item.main.status === '0'" type="success">已完成</el-tag>
-                        <el-tag v-else-if="item.main.status === '1'" type="danger">待付款</el-tag>
-                        <el-tag v-else-if="item.main.status === '2'" type="danger">待尾款</el-tag>
-                        <el-tag v-else-if="item.main.status === '3'" type="danger">待送货</el-tag>
-                      </span>
-                      {{item.main.name + ' - ' + item.main.address}}
-                    </span>
-                  </transition>
-                  <transition name="el-fade-in">
-                    <span class="button-area" v-show="item.showButton">
-                      <el-button type="primary" icon="el-icon-picture" @click.stop="showPicture(item)">查看图片</el-button>
-                      <el-button type="warning" icon="el-icon-s-order" @click.stop="showPdf(item)">查看PDF</el-button>
-                    </span>
-                  </transition>
-                </v-touch>
+              <div class="content-area" @touchstart="touchstart($event,index)" @touchmove="touchmove($event,index)" @touchend="touchend($event,index)">
+                <div class="content-button" :style="buttonStyle(index)">
+                  <div class="pic-button">
+                    <span class="el-icon-picture" @click.stop="showPicture(item)"></span>图片
+                  </div>
+                  <div class="pdf-button">
+                    <span class="el-icon-s-order" @click.stop="showPdf(item)"></span>PDF
+                  </div>
+                </div>
+                <div class="content-main" :style="contentStyle(index)" :ref="'contentMain' + index">
+                  <span style="margin-right: 10px">
+                    <el-tag v-if="item.main.status === '0'" type="success">已完成</el-tag>
+                    <el-tag v-else-if="item.main.status === '1'" type="danger">待付款</el-tag>
+                    <el-tag v-else-if="item.main.status === '2'" type="danger">待尾款</el-tag>
+                    <el-tag v-else-if="item.main.status === '3'" type="danger">待送货</el-tag>
+                  </span>
+                  {{item.main.name + ' - ' + item.main.address}}
+                </div>
               </div>
             </div>
         </template>
@@ -64,6 +62,12 @@ export default {
       searcher: {
         status: null
       },
+      touch: {
+        start: 0,
+        move: 0,
+        index: 0,
+        distance: 0
+      },
       picture: {
         id: null,
         show: false
@@ -74,6 +78,40 @@ export default {
         content: {}
       },
       orders: []
+    }
+  },
+  computed: {
+    contentStyle () {
+      return function (index) {
+        if (this.touch.distance === 0) {
+          return {}
+        }
+        if (index === this.touch.index) {
+          let distance = this.touch.distance
+          let marginLeft = 0
+          if (this.touch.distance < 0) { // 反向滑动
+            marginLeft = distance / 2 + 'px'
+          } else { // 正向滑动
+            marginLeft = -120 + distance / 2 + 'px'
+          }
+          console.log(marginLeft)
+          return {
+            marginLeft: `calc( ${marginLeft} )`
+          }
+        }
+        return {}
+      }
+    },
+    buttonStyle () {
+      return function (index) {
+        if (this.touch.distance === 0) {
+          return { display: 'none' }
+        }
+        if (index === this.touch.index) {
+          return { display: 'inline-block', backgroundCcolor: '#e4474d', width: '120px' }
+        }
+        return { display: 'none' }
+      }
     }
   },
   created () {
@@ -108,7 +146,10 @@ export default {
               status: item.status
             },
             show: false,
-            showButton: false,
+            touch: {
+              start: 0,
+              move: 0
+            },
             details: []
           }
           checked[item.id] = order
@@ -134,6 +175,7 @@ export default {
           i.show = false
         }
       })
+      this.touch.distance = 0
     },
     showPicture (item) {
       this.picture = {
@@ -148,13 +190,27 @@ export default {
         content: item.main
       }
     },
-    swiperleft (item) {
-      item.showButton = true
-      console.log(item.showButton)
+    touchstart (e, index) {
+      this.touch.start = e.targetTouches[0].clientX
+      this.touch.index = index
     },
-    swiperright (item) {
-      item.showButton = false
-      console.log(item.showButton)
+    touchmove (e, index) {
+      if (e.targetTouches[0].clientX - this.touch.start < 241) {
+        this.touch.move = e.targetTouches[0].clientX
+      }
+      this.touch.distance = this.touch.move - this.touch.start
+      this.touch.index = index
+      console.log('distance:' + this.touch.distance)
+    },
+    touchend (e, index) {
+      if (this.touch.distance < 120) {
+        this.touch.distance = 0
+      } else if (this.touch.distance >= 120 && this.touch.distance <= 240) {
+        this.touch.distance = 240
+      }
+      this.touch.index = index
+      console.log('start:' + this.touch.start)
+      this.touch.move = 0
     }
   }
 }
@@ -164,17 +220,36 @@ export default {
 .order-mobile-index {
   width: 100%;
   height: 100%;
-  .item-title {
+  .content-area {
     width: 100%;
-    display: flex;
-    .content-area {
-      flex: 1;
+    .content-main {
+      position:static;
+      z-index: 1;
+      display: inline-block;
+      background-color: #ffffff;
+      width: 500px;
     }
-    .button-area {
-      flex: 1;
-      i {
-        font-size: 25px;
-        margin: 0 5px;
+    .content-button {
+      position:static;
+      z-index: -1;
+      width: 60px;
+      height: 100%;
+      div {
+        width: 60px;
+        height: 100%;
+        display: inline-block;
+        span {
+          font-size: 12px;
+          margin-left: 10px;
+          margin-right: 5px;
+          color: #ffffff;
+        }
+      }
+      .pic-button {
+        background-color: #a2a2a2;
+      }
+      .pdf-button {
+        background-color: #eaeaea;
       }
     }
   }
