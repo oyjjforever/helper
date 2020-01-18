@@ -34,7 +34,7 @@
           border
           stripe
           ref="table"
-          :data="item.details"
+          :data="item.main.details"
           highlight-current-row
         >
           <el-table-column prop="model" label="型号" align="left" show-overflow-tooltip></el-table-column>
@@ -143,18 +143,18 @@ export default {
               sendDate: item.sendDate,
               amount: item.amount,
               remark: item.remark,
-              status: item.status
+              status: item.status,
+              details: []
             },
             show: false,
             touch: {
               start: 0,
               move: 0
-            },
-            details: []
+            }
           }
           checked[item.id] = order
         }
-        checked[item.id]['details'].push({
+        checked[item.id]['main']['details'].push({
           model: item.model,
           color: item.color,
           format: item.format,
