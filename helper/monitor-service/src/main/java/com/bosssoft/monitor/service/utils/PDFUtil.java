@@ -121,30 +121,48 @@ public class PDFUtil {
         table.addCell(cell);
         // 设置商品部分
         for (OrderDetail item: wholeOrder.getOrderDetails()) {
-            cell = new PdfPCell(new Paragraph(item.getModel(), font));
-            cell.setColspan(6);
-            table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(item.getFormat(), font));
-            cell.setColspan(5);
-            table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(item.getColor(), font));
-            cell.setColspan(3);
-            table.addCell(cell);
-            cell = new PdfPCell(new Paragraph("", font));
-            cell.setColspan(2);
-            table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(""+item.getPrice(), font));
-            cell.setColspan(3);
-            table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(""+item.getNum(), font));
-            cell.setColspan(3);
-            table.addCell(cell);
-            cell = new PdfPCell(new Paragraph("", font));
-            cell.setColspan(3);
-            table.addCell(cell);
-            cell = new PdfPCell(new Paragraph("", font));
-            cell.setColspan(5);
-            table.addCell(cell);
+            if(item != null) {
+                if (item.getModel() != null) {
+                    cell = new PdfPCell(new Paragraph(item.getModel(), font));
+                    cell.setColspan(6);
+                    table.addCell(cell);
+                }
+                if (item.getFormat() != null) {
+                    cell = new PdfPCell(new Paragraph(item.getFormat(), font));
+                    cell.setColspan(5);
+                    table.addCell(cell);
+                }
+                if (item.getColor() != null) {
+                    cell = new PdfPCell(new Paragraph(item.getColor(), font));
+                    cell.setColspan(3);
+                    table.addCell(cell);
+                }
+                if (true) {
+                    cell = new PdfPCell(new Paragraph("", font));
+                    cell.setColspan(2);
+                    table.addCell(cell);
+                }
+                if (""+item.getPrice() != null) {
+                    cell = new PdfPCell(new Paragraph(""+item.getPrice(), font));
+                    cell.setColspan(3);
+                    table.addCell(cell);
+                }
+                if (""+item.getNum() != null) {
+                    cell = new PdfPCell(new Paragraph(""+item.getNum(), font));
+                    cell.setColspan(3);
+                    table.addCell(cell);
+                }
+                if (true) {
+                    cell = new PdfPCell(new Paragraph("", font));
+                    cell.setColspan(3);
+                    table.addCell(cell);
+                }
+                if (true) {
+                    cell = new PdfPCell(new Paragraph("", font));
+                    cell.setColspan(5);
+                    table.addCell(cell);
+                }
+            }
         }
         // 设置页脚
         cell = new PdfPCell(new Paragraph("合计(人民币大写)", font));

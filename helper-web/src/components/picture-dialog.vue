@@ -1,7 +1,6 @@
 <template>
   <div>
     <el-dialog
-      v-dialog
       width="100vw"
       v-if="pic.show"
       :visible.sync="pic.show"
